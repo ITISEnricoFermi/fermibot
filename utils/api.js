@@ -21,7 +21,8 @@ module.exports = class Api {
   sendDocument (channel, document, caption) {
     return telegram.sendDocument(channel, document, {
       caption,
-      parse_mode: 'HTML'
+      parse_mode: 'HTML',
+      thumb: 'https://vets-now.s3.amazonaws.com/uploads/2017/01/Dog-laboured-breathing-Vets-Now-90x90.jpg'
     })
   }
 
@@ -32,7 +33,7 @@ module.exports = class Api {
   formatMessagePost (post) {
     const { title, link } = post
     const decoded = decode(title.rendered)
-    return `<b>${decoded}:</b> <a href="${link}">Circolare</a>`
+    return `<a href="${link}">${decoded}</a>`
   }
 
   async getPosts (pages, step) {
