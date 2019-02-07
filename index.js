@@ -12,12 +12,12 @@ const bot = new Telegraf(TOKEN)
 const api = new Api(API)
 
 app.get('/', (req, res) => {
-  console.log(req.body)
+  console.log(req)
   res.status(200).send()
 })
 
 app.post('/', (req, res) => {
-  console.log(req.body)
+  console.log(req)
   res.status(200).send()
 })
 
