@@ -1,34 +1,39 @@
 require('./env/env')
-const api = require('./utils/api')
+const Api = require('./utils/api')
+const { parse } = require('node-html-parser')
+const parseUrl = require('parse-url')
 
 const Telegraf = require('telegraf')
-const Telegram = require('telegraf/telegram')
 const express = require('express')
-const decode = require('ent/decode')
 
-const { PORT, TOKEN, CHANNEL } = process.env
+const { PORT, TOKEN, API, CHANNEL } = process.env
 const app = express()
 const bot = new Telegraf(TOKEN)
-const telegram = new Telegram(TOKEN)
+const api = new Api(API)
 
 app.get('/', (req, res) => {
-  api.get('/posts/', {
-    params: {
-      page: 1,
-      per_page: 1
-    }
-  })
-    .then(posts => {
-      const { title, link } = posts.data[0]
-      const decoded = decode(title.rendered)
-      const message = decoded + ': ' + link
-      res.status(200).send()
-      return telegram.sendMessage(CHANNEL, message)
-    })
-    .catch(e => {
-      console.log(e)
-    })
+  // const posts = api.getPosts(1,1)
 })
+
+api.getPosts(1, 1)
+  .then(posts => {
+    const post = posts[0]
+    const { id } = post
+    return api.getPost(id)
+  })
+  .then(post => {
+    if (!post.content.rendered) {
+      return api.sendPost(CHANNEL, post)
+    }
+    const html = parse(post.content.rendered)
+    const { src } = html.querySelector('iframe').attributes
+    const { query } = parseUrl(src)
+    return api.sendDocument(CHANNEL, query.url, api.formatMessagePost(post))
+    // return Promise.all([api.sendPost(CHANNEL, post), api.sendDocument(CHANNEL, query.url)])
+  })
+  .catch(e => {
+    console.log(e)
+  })
 
 bot.launch()
 app.listen(PORT, () => {
