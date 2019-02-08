@@ -2,6 +2,7 @@ require('./env/env')
 const Api = require('./utils/api')
 const { parse } = require('node-html-parser')
 const parseUrl = require('parse-url')
+const bodyParser = require('body-parser')
 
 const Telegraf = require('telegraf')
 const express = require('express')
@@ -11,10 +12,12 @@ const app = express()
 const bot = new Telegraf(TOKEN)
 const api = new Api(API)
 
-app.get('/', (req, res) => {
-  console.log(req)
-  res.status(200).send()
-})
+app.use(bodyParser.json())
+
+// app.get('/', (req, res) => {
+//   console.log(req)
+//   res.status(200).send()
+// })
 
 app.post('/', (req, res) => {
   console.log(req.body)
