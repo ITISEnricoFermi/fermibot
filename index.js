@@ -14,37 +14,24 @@ const api = new Api(API)
 
 app.use(bodyParser.json())
 
-// app.get('/', (req, res) => {
-//   console.log(req)
-//   res.status(200).send()
-// })
-
 app.post('/', (req, res) => {
-  console.log(req.body)
-  res.status(200).send()
+  const { id } = req.body
+
+  api.getPost(id)
+    .then(post => {
+      if (!post.content.rendered) {
+        return api.sendPost(CHANNEL, post)
+      }
+      const html = parse(post.content.rendered)
+      const { src } = html.querySelector('iframe').attributes
+      const { query } = parseUrl(src)
+      res.status(200).send()
+      return api.sendDocument(CHANNEL, query.url, api.formatMessagePost(post))
+    })
+    .catch(e => {
+      console.log(e.message)
+    })
 })
-
-// api.getPosts(1, 2)
-//   .then(posts => {
-//     const post = posts[1]
-//     const { id } = post
-//     return api.getPost(id)
-//   })
-//   .then(post => {
-//     if (!post.content.rendered) {
-//       return api.sendPost(CHANNEL, post)
-//     }
-//     const html = parse(post.content.rendered)
-//     const { src } = html.querySelector('iframe').attributes
-//     const { query } = parseUrl(src)
-//     return api.sendDocument(CHANNEL, query.url, api.formatMessagePost(post))
-//   })
-//   .catch(e => {
-//     console.log(e)
-//   })
-
-// bot.startWebhook('/', null, PORT)
-// bot.handleUpdate(rawUpdate, [webhookResponse])
 
 bot.launch()
 
