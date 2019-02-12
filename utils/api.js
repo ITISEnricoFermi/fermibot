@@ -8,7 +8,7 @@ const telegram = new Telegram(TOKEN)
 module.exports = class Api {
   constructor (api) {
     this.instance = axios.create({
-      baseURL: api
+      baseURL: api + '/wp-json/wp/v2/'
     })
   }
 
@@ -37,17 +37,27 @@ module.exports = class Api {
   }
 
   async getPosts (pages, step) {
-    const { data } = await this.instance.get('/posts/', {
-      params: {
-        page: pages,
-        per_page: step
-      }
-    })
-    return data
+    try {
+      const { data } = await this.instance.get('/posts/', {
+        params: {
+          page: pages,
+          per_page: step
+        }
+      })
+
+      return data
+    } catch (e) {
+      throw new Error('Impossibile reperire i post.')
+    }
   }
 
   async getPost (id) {
-    const { data } = await this.instance.get(`/posts/${id}`)
-    return data
+    try {
+      const { data } = await this.instance.get(`/posts/${id}`)
+
+      return data
+    } catch (e) {
+      throw new Error('Impossibile reperire il post.')
+    }
   }
 }
