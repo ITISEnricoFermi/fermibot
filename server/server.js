@@ -1,6 +1,4 @@
-const Api = require('./utils/api')
-const { parse } = require('node-html-parser')
-const parseUrl = require('parse-url')
+const api = require('./utils/api')
 const bodyParser = require('body-parser')
 const express = require('express')
 
@@ -13,36 +11,27 @@ const { bearer } = require('./middleware/authenticate')
 
 const app = express()
 
-const api = new Api(API)
+const telegram = api(API)
 
 app.use(bodyParser.json())
 
 app.post('/', bearer, asyncMiddleware(async (req, res) => {
   const { id } = req.body
 
-  const post = await api.getPost(id)
+  const requests = [telegram.getPost(id), telegram.getDocumentByPost(id)]
+  const [post, document] = await Promise.all(requests)
 
-  if (!post.content.rendered) {
-    res.status(200).send()
-    return api.sendPost(CHANNEL, post)
+  if (!document) {
+    await telegram.sendPost(CHANNEL, post)
+  } else {
+    await telegram.sendDocument(CHANNEL, document, post)
   }
 
-  const html = parse(post.content.rendered)
-  const iframe = html.querySelector('iframe')
-
-  if (!iframe) {
-    res.status(200).send()
-    return api.sendPost(CHANNEL, post)
-  }
-
-  const { src } = iframe.attributes
-  const { query } = parseUrl(src)
-  res.status(200).send()
-  return api.sendDocument(CHANNEL, query.url, api.formatMessagePost(post))
+  return res.status(200).send()
 }))
 
 app.use(error())
 
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}.`)
+  console.log(`🚀 Server started on port ${PORT}.`)
 })
