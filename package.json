@@ -1,6 +1,6 @@
 {
   "name": "fermibot",
-  "version": "1.0.0",
+  "version": "0.0.3",
   "description": "Bot Telegram dell'ITIS Enrico Fermi.",
   "main": "index.js",
   "scripts": {

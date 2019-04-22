@@ -57,7 +57,7 @@ class Api {
   formatMessagePost (post) {
     const { title, link } = post
     const decoded = decode(title.rendered)
-    return `<a href="${link}">${decoded}</a>`
+    return `${process.env.EMOJI} ${decoded} <a href="${link}">via ITIS Enrico Fermi.</a>`
   }
 
   /**
