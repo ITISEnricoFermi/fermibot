@@ -6,6 +6,28 @@
   Bot Telegram dell'ITIS Enrico Fermi.
 </p>
 
+# Getting Started
+
+Prima di avviare il bot è necessario impostare alcune variabili d'ambiente.
+
+|Variabile|Default    |Descrizione               |
+|---------|-----------|--------------------------|
+|TOKEN    |token      |Il token Telegram del bot.|
+|CHANNEL  |@itisfermi |L'ID del canale Telegram al quale inviare i messaggi.|
+|PORT    |3000        |La porta del server per le API.|
+|API     |https://itisfermi.edu.it | Il sito Wordpress da cui reperire le informazioni.|
+
+***env.example.json***
+
+```json
+{
+  "TOKEN": "token",
+  "CHANNEL": "@itisfermi",
+  "PORT": 3000,
+  "API": "https://itisfermi.edu.it/"
+}
+```
+
 ## Authors
 
 * **Riccardo Sangiorgio** - [Richard1984](https://github.com/Richard1984/)
