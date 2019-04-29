@@ -14,8 +14,9 @@ Prima di avviare il bot è necessario impostare alcune variabili d'ambiente.
 |---------|-----------|--------------------------|
 |TOKEN    |token      |Il token Telegram del bot.|
 |CHANNEL  |@itisfermi |L'ID del canale Telegram al quale inviare i messaggi.|
-|PORT    |3000        |La porta del server per le API.|
-|API     |https://itisfermi.edu.it | Il sito Wordpress da cui reperire le informazioni.|
+|PORT     |3000       |La porta del server per le API.|
+|API      |https://itisfermi.edu.it | Il sito Wordpress da cui reperire le informazioni.|
+|EMOJI    |🏫         |L'emoji che compare all'inizio del messaggio.|
 
 ***env.example.json***
 
@@ -24,7 +25,8 @@ Prima di avviare il bot è necessario impostare alcune variabili d'ambiente.
   "TOKEN": "token",
   "CHANNEL": "@itisfermi",
   "PORT": 3000,
-  "API": "https://itisfermi.edu.it/"
+  "API": "https://itisfermi.edu.it/",
+  "EMOJI: "🏫"
 }
 ```
 
