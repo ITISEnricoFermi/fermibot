@@ -26,7 +26,7 @@ Prima di avviare il bot è necessario impostare alcune variabili d'ambiente.
   "CHANNEL": "@itisfermi",
   "PORT": 3000,
   "API": "https://itisfermi.edu.it/",
-  "EMOJI: "🏫"
+  "EMOJI": "🏫"
 }
 ```
 
