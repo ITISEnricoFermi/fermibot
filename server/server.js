@@ -1,3 +1,5 @@
+require('../env/env')
+
 const api = require('./utils/api')
 const bodyParser = require('body-parser')
 const express = require('express')

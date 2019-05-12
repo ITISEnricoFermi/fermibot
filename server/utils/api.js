@@ -46,7 +46,7 @@ class Api {
  * @return {Promise}         Il post è stato inviato.
  */
   async sendPost (channel, post) {
-    return this.sendMessage(channel, this.formatMessagePost(post))
+    return this.sendMessage(channel, await this.formatMessagePost(post))
   }
 
   /**
@@ -54,10 +54,13 @@ class Api {
  * @param  {Object} post L'oggetto post.
  * @return {String}      Il tag <a> HTML che punta al post.
  */
-  formatMessagePost (post) {
+  async formatMessagePost (post) {
     const { title, link } = post
+    const categories = this.formatCategories(await this.getCategoriesByPost(post))
     const decoded = decode(title.rendered)
-    return `${process.env.EMOJI} ${decoded} <a href="${link}">via ITIS Enrico Fermi.</a>`
+    const emoji = process.env.EMOJI
+    const href = this.formatLink(link)
+    return `${emoji} ${categories} ${decoded} ${href}`
   }
 
   /**
@@ -103,7 +106,7 @@ class Api {
  */
   async getDocumentByPost (id) {
     try {
-      const { data } = await this.instance('/media/', {
+      const { data } = await this.instance.get('/media/', {
         params: {
           parent: id
         }
@@ -117,6 +120,50 @@ class Api {
     } catch (e) {
       throw new Error('Impossibile reperire il documento.')
     }
+  }
+
+  /**
+   * Restituisce le categorie associate al post.
+   * @param  {Object}  post L'oggetto post.
+   * @return {Promise}      La lista delle categorie.
+   */
+  async getCategoriesByPost (post) {
+    const { id } = post
+
+    try {
+      const { data } = await this.instance.get('/categories/', {
+        params: {
+          post: id
+        }
+      })
+
+      if (!data.length) {
+        return false
+      }
+
+      return data
+    } catch (e) {
+      throw new Error('Impossibile reperire le categorie.')
+    }
+  }
+
+  /**
+   * Restituisce la lista dei nomi delle categorie.
+   * @param  {Array}  categories La lista degli oggetti categoria.
+   * @return {Promise}           Lista dei nomi delle categorie.
+   */
+  formatCategories (categories) {
+    const list = categories.map(el => el.name + ' ')
+    return `<b>[${list}]</b>`
+  }
+
+  /**
+   * Restituisce il tag a che punta al link fornito.
+   * @param  {String} link Il link da inserire nel tag a.
+   * @return {String}      Il tag a.
+   */
+  formatLink (link) {
+    return `<a href="${link}">via ITIS Enrico Fermi.</a>`
   }
 }
 
