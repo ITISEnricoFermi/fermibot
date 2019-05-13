@@ -153,7 +153,7 @@ class Api {
    * @return {Promise}           Lista dei nomi delle categorie.
    */
   formatCategories (categories) {
-    const list = categories.map(el => el.name + ' ')
+    const list = categories.map(el => el.name).join(', ')
     return `<b>[${list}]</b>`
   }
 
