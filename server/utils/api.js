@@ -34,7 +34,7 @@ class Api {
  */
   async sendDocument (channel, document, post) {
     return telegram.sendDocument(channel, document, {
-      caption: this.formatMessagePost(post),
+      caption: await this.formatMessagePost(post),
       parse_mode: 'HTML'
     })
   }
