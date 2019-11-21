@@ -15,7 +15,7 @@
     "express": "^4.16.4",
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
-    "telegraf": "^3.32.0"
+    "telegraf": "^3.33.3"
   },
   "devDependencies": {
     "eslint": "^6.2.2",
