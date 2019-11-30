@@ -9,7 +9,7 @@ const telegram = new Telegram(TOKEN)
 class Api {
   constructor (api) {
     this.instance = axios.create({
-      baseURL: new URL('/wp-json/wp/v2/', api)
+      baseURL: new URL('/wp-json/wp/v2/', api).href
     })
   }
 
