@@ -1,7 +1,7 @@
 const axios = require('axios')
 const decode = require('ent/decode')
 const Telegram = require('telegraf/telegram')
-const url = require('url')
+const { URL } = require('url')
 
 const { TOKEN } = process.env
 const telegram = new Telegram(TOKEN)
@@ -9,7 +9,7 @@ const telegram = new Telegram(TOKEN)
 class Api {
   constructor (api) {
     this.instance = axios.create({
-      baseURL: new url.URL(api, '/wp-json/wp/v2/')
+      baseURL: new URL('/wp-json/wp/v2/', api)
     })
   }
 
